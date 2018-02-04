@@ -7,7 +7,7 @@ from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Flatten
 
 import numpy as np
 
-base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3), pooling='avg')
 
 x = base_model.output
 

@@ -15,8 +15,8 @@ x = base_model.output
 #x = Dense(1024, activation='relu')(x)
 #x = Dropout(0.4)(x)
 x = Flatten()(x)
-prediction = Dense(1, kernel_regularizer=regularizers.l2(0.01),
-                activity_regularizer=regularizers.l1(0.01))(x)
+prediction = Dense(1, kernel_regularizer=regularizers.l2(0.02),
+                activity_regularizer=regularizers.l1(0.02))(x)
 
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=prediction)

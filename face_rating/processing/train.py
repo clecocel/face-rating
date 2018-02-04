@@ -2,7 +2,7 @@
 
 from data_generator import main
 from resnet import *
-from keras.optimizers import SGD
+from keras.optimizers import SGD, Adam
 
 BATCH_SIZE = 32
 
@@ -14,7 +14,8 @@ def write_results(filename, history):
         print(history.history['val_mean_absolute_error'], file=f)
 
 def train(model, filename=None):
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'], decay=0.93)
+    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.93, amsgrad=False)
+    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'], decay=0.93)
 
     history = model.fit_generator(
         training_generator,

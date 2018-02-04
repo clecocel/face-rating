@@ -3,7 +3,7 @@
 from keras.applications.resnet50 import ResNet50
 from keras import regularizers
 from keras.models import Model
-from keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Flatten
 
 import numpy as np
 

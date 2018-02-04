@@ -17,7 +17,7 @@ history = model.fit_generator(
     callbacks=None,
     validation_data=test_set)
 
-print(history)
+print(history.history['val_mean_absolute_error'])
 '''
 model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='mean_squared_error', metrics=['mae', 'mse'])
 

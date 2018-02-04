@@ -3,7 +3,8 @@
 from keras.applications.resnet50 import ResNet50
 from keras.preprocessing import image
 from keras.applications.resnet50 import preprocess_input, decode_predictions
-from keras.layers import Dense
+from keras.layers import Dense, GlobalAveragePooling2D
+
 import numpy as np
 
 base_model = ResNet50(weights='imagenet', include_top=False)

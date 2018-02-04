@@ -3,11 +3,13 @@
 from data_generator import main
 from resnet import model
 
-training_gen, training_samples, test_set, test_samples = main(batch_size=64)
+BATCH_SIZE = 64
+
+training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE)
 
 model.fit_generator(
     training_generator,
-    steps_per_epoch=int(training_samples / batch_size),
+    steps_per_epoch=training_samples // BATCH_SIZE,
     epochs=1,
     callbacks=None,
     validation_data=test_set)

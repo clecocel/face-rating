@@ -4,7 +4,7 @@ import logging as logs
 import inspect
 import numpy as np
 
-from keras.models import Model
+from keras.models import Model, load_model
 import cv2
 
 from face_rating.processing import face_detector
@@ -25,11 +25,24 @@ def main(model: Model, image: np.array, input_size=(224, 224)):
     if len(faces) == 0:
         logger.error('No face detected in this image')
     x = np.array(faces)
-    model.predict(x)
+    y_pred = list(model.predict(x))
+    return faces, y_pred
 
 
 if __name__ == '__main__':
-    path = '/home/rschucker/Documents/face/data/test_images/860_main_beauty.png'
-    image = cv2.imread(path)
-    main(None, image)
+    image_path = '/home/rschucker/Documents/face/data/test_images/860_main_beauty.png'
+    model_path = '/home/rschucker/Documents/face/data/trained_model/resnet-trained.h5'
+
+    image = cv2.imread(image_path)
+    model = load_model(model_path)
+    faces, y_pred = main(model, image)
+    import matplotlib.pyplot as plt
+
+    for f, y in zip(faces, y_pred):
+        plt.figure()
+        plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        plt.title('Score {:2.1f}/5'.format(y))
+        plt.show(block=False)
+    plt.show()
+
 

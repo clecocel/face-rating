@@ -15,7 +15,7 @@ def write_results(filename, history):
 
 def train(model, filename=None):
     adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.93, amsgrad=False)
-    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'], decay=0.93)
+    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
 
     history = model.fit_generator(
         training_generator,

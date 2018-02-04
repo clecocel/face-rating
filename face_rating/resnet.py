@@ -1,9 +1,10 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 from keras.applications.resnet50 import ResNet50
 from keras.preprocessing import image
 from keras.applications.resnet50 import preprocess_input, decode_predictions
-from keras.layers import Dense
+from keras.layers import Dense, Flatten
+from keras.models import Model
 import numpy as np
 
 base_model = ResNet50(weights='imagenet', include_top=False)
@@ -20,7 +21,7 @@ model = Model(inputs=base_model.input, outputs=prediction)
 # first: train only the top layers (which were randomly initialized)
 # i.e. freeze all convolutional InceptionV3 layers
 for layer in base_model.layers:
-	layer.trainable = False
+    layer.trainable = False
 
 # compile the model (should be done *after* setting layers to non-trainable)
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])

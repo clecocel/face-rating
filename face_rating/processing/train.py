@@ -25,3 +25,5 @@ model.fit_generator(
     epochs=10,
     callbacks=None,
     validation_data=test_set)
+
+model.save('resnet.h5')

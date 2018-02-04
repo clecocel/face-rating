@@ -10,13 +10,15 @@ training_generator, training_samples, test_set, test_samples = main(batch_size=B
 
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
 
-model.fit_generator(
+history = model.fit_generator(
     training_generator,
     steps_per_epoch=training_samples // BATCH_SIZE,
-    epochs=10,
+    epochs=1,
     callbacks=None,
     validation_data=test_set)
 
+print(history)
+'''
 model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='mean_squared_error', metrics=['mae', 'mse'])
 
 model.fit_generator(
@@ -27,3 +29,4 @@ model.fit_generator(
     validation_data=test_set)
 
 model.save('resnet.h5')
+'''

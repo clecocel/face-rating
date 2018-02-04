@@ -2,6 +2,7 @@
 
 from keras.applications.resnet50 import ResNet50
 from keras.preprocessing import image
+from keras.models import Model
 from keras.applications.resnet50 import preprocess_input, decode_predictions
 from keras.layers import Dense, GlobalAveragePooling2D
 

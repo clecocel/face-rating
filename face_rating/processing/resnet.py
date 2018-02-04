@@ -8,6 +8,12 @@ from keras.layers import Dense, GlobalAveragePooling2D, Dropout, Flatten
 import numpy as np
 
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3), pooling='avg')
+base_model2 = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+
+for layer in base_model.layers:
+    layer.trainable = False
+for layer in base_model2.layers:
+    layer.trainable = False
 
 
 
@@ -38,8 +44,11 @@ model2 = Model(inputs=base_model.input, outputs=prediction)
 #############################################################
 x = base_model.output
 #x = Flatten()(x)
-prediction = Dense(1, kernel_regularizer=regularizers.l2(0.02),
-                activity_regularizer=regularizers.l1(0.02))(x)
+x = Dense(1024, activation='relu', kernel_regularizer=regularizers.l2(0.01),
+                activity_regularizer=regularizers.l1(0.01))(x)
+x = Dropout(0.4)(x)
+prediction = Dense(1, kernel_regularizer=regularizers.l2(0.05),
+                activity_regularizer=regularizers.l1(0.05))(x)
 # this is the model we will train
 model3 = Model(inputs=base_model.input, outputs=prediction)
 #############################################################
@@ -57,14 +66,6 @@ model4= Model(inputs=base_model.input, outputs=prediction)
 #############################################################
 
 
-
-# first: train only the top layers (which were randomly initialized)
-# i.e. freeze all convolutional InceptionV3 layers
-for layer in base_model.layers:
-    layer.trainable = False
-
-
-base_model2 = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
 
 
 #############################################################
@@ -114,7 +115,16 @@ prediction = Dense(1, kernel_regularizer=regularizers.l2(0.02),
 model8= Model(inputs=base_model2.input, outputs=prediction)
 #############################################################
 
-# first: train only the top layers (which were randomly initialized)
-# i.e. freeze all convolutional InceptionV3 layers
-for layer in base_model2.layers:
-    layer.trainable = False
+#############################################################
+x = base_model2.output
+x = Dense(1024, activation='relu', kernel_regularizer=regularizers.l2(0.01),
+                activity_regularizer=regularizers.l1(0.01))(x)
+x = Dropout(0.4)(x)
+#x = Flatten()(x)
+prediction = Dense(1, kernel_regularizer=regularizers.l2(0.05),
+                activity_regularizer=regularizers.l1(0.05))(x)
+model9 = Model(inputs=base_model2.input, outputs=prediction)
+#############################################################
+
+
+

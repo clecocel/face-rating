@@ -13,7 +13,7 @@ def write_results(filename, history):
         print(history.history['mean_absolute_error'], file=f)
         print(history.history['val_mean_absolute_error'], file=f)
 
-def train(model):
+def train(model, filename=None):
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
 
     history = model.fit_generator(
@@ -22,8 +22,14 @@ def train(model):
         epochs=20,
         callbacks=None,
         validation_data=test_set)
+    if filename is not None:
+        write_results(filename, history)
     return history
 
+train(model9, 'results_model9.txt')
+train(model3, 'results_model3.txt')
+
+'''
 results = []
 
 results.append(train(model1))
@@ -49,6 +55,9 @@ with open('training_results.txt', 'w') as f:
         print(result.history['mean_absolute_error'], file=f)
         print(result.history['val_mean_absolute_error'], file=f)
         print('------------------', file=f)
+'''
+
+
 
 '''
 model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='mean_squared_error', metrics=['mae', 'mse'])

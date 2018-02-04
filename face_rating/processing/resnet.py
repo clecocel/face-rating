@@ -1,23 +1,22 @@
 #!/usr/bin/env python2.7
 
 from keras.applications.resnet50 import ResNet50
-from keras.preprocessing import image
+from keras import regularizers
 from keras.models import Model
-from keras.applications.resnet50 import preprocess_input, decode_predictions
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 
 import numpy as np
 
-base_model = ResNet50(weights='imagenet', include_top=False)
+base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
 
 x = base_model.output
 
-
-x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
-x = Dense(1024, activation='relu')(x)
-x = Dropout(0.4)(x)
-prediction = Dense(1)(x)
+#x = Dense(1024, activation='relu')(x)
+#x = Dropout(0.4)(x)
+x = Flatten()(x)
+prediction = Dense(1, kernel_regularizer=regularizers.l2(0.01),
+                activity_regularizer=regularizers.l1(0.01))(x)
 
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=prediction)

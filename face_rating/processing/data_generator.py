@@ -7,7 +7,7 @@ import pandas as pd
 from keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img
 from sklearn.model_selection import train_test_split
 
-FACE_RATING_HOME = '/home/rschucker/Documents/face'  # os.environ.get('FACE_RATING_HOME')
+FACE_RATING_HOME = '/home/ubuntu/dataset/SCUT-FBP5500'  # os.environ.get('FACE_RATING_HOME')
 
 DATA_DIR = 'data'
 IMAGES_PATH = os.path.join(FACE_RATING_HOME, DATA_DIR, 'Images')

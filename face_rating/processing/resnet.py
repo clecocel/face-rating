@@ -4,7 +4,7 @@ from keras.applications.resnet50 import ResNet50
 from keras.preprocessing import image
 from keras.models import Model
 from keras.applications.resnet50 import preprocess_input, decode_predictions
-from keras.layers import Dense, GlobalAveragePooling2D
+from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 
 import numpy as np
 
@@ -16,6 +16,7 @@ x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
 x = Dense(1024, activation='relu')(x)
+x = Dropout(0.4)(x)
 prediction = Dense(1)(x)
 
 # this is the model we will train

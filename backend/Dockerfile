@@ -2,18 +2,11 @@ FROM tiangolo/uwsgi-nginx-flask:python3.6
 
 RUN apt-get -qq update
 RUN apt-get install -y \
-    libgeos-dev \
-    libspatialindex-dev \
-    gdal-bin \
     man \
     --fix-missing
 
 COPY ./backend/requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
-
-# COPY ./app/main.py /app/main.py
-# COPY ./lib /usr/local/lib/python3.6/site-packages/backend/lib
-# COPY ./app /usr/local/lib/python3.6/site-packages/backend/app
 
 # UWSGI and NGINX configs
 COPY ./backend/config/uwsgi.ini /app/uwsgi.ini

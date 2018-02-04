@@ -26,8 +26,10 @@ def train(model, filename=None):
         write_results(filename, history)
     return history
 
-train(model9, 'results_model9.txt')
-train(model3, 'results_model3.txt')
+train(model6, 'results_model6.txt')
+train(model7, 'results_model7.txt')
+train(model8, 'results_model8.txt')
+train(model4, 'results_model4.txt')
 
 '''
 results = []

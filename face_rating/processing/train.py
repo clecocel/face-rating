@@ -4,7 +4,7 @@ from data_generator import main
 from resnet import *
 from keras.optimizers import SGD
 
-BATCH_SIZE = 128
+BATCH_SIZE = 32
 
 training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE)
 
@@ -14,7 +14,7 @@ def write_results(filename, history):
         print(history.history['val_mean_absolute_error'], file=f)
 
 def train(model, filename=None):
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'], decay=0.93)
 
     history = model.fit_generator(
         training_generator,
@@ -26,14 +26,23 @@ def train(model, filename=None):
         write_results(filename, history)
     return history
 
-print("Training Model 6")
-train(model6, 'results_model6.txt')
 print("Training Model 7")
 train(model7, 'results_model7.txt')
+
+print("Training Model 2")
+train(model2, 'results_model2.txt')
+
+
 print("Training Model 8")
 train(model8, 'results_model8.txt')
+
 print("Training Model 4")
 train(model4, 'results_model4.txt')
+
+
+
+
+
 
 '''
 results = []

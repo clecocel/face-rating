@@ -129,5 +129,13 @@ prediction = Dense(1, kernel_regularizer=regularizers.l2(0.05),
 model9 = Model(inputs=base_model2.input, outputs=prediction)
 #############################################################
 
+#############################################################
+x = base_model2.output
+x = Flatten()(x)
+prediction = Dense(1, kernel_regularizer=regularizers.l2(0.01),
+                activity_regularizer=regularizers.l1(0.01))(x)
+# this is the model we will train
+model10 = Model(inputs=base_model2.input, outputs=prediction)
+#############################################################
 
 

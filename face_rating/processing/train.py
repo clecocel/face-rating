@@ -10,6 +10,6 @@ training_generator, training_samples, test_set, test_samples = main(batch_size=B
 model.fit_generator(
     training_generator,
     steps_per_epoch=training_samples // BATCH_SIZE,
-    epochs=1,
+    epochs=10,
     callbacks=None,
     validation_data=test_set)

@@ -24,7 +24,7 @@ model = Model(inputs=base_model.input, outputs=prediction)
 # first: train only the top layers (which were randomly initialized)
 # i.e. freeze all convolutional InceptionV3 layers
 for layer in base_model.layers:
-	layer.trainable = False
+    layer.trainable = False
 
 # compile the model (should be done *after* setting layers to non-trainable)
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mse'])

@@ -6,7 +6,7 @@ from keras.optimizers import SGD, Adam
 
 BATCH_SIZE = 32
 
-training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE)
+training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE, data_augmentation=False)
 
 def write_results(filename, history):
     with open(filename, 'w') as f:
@@ -29,23 +29,23 @@ def train(model, filename=None):
 
 
 
-print("Training Model 7")
-train(model7, 'results_model7.txt')
+#print("Training Model 7")
+#train(model7, 'results_model7.txt')
 
-print("Training Model 2")
-train(model2, 'results_model2.txt')
+#print("Training Model 2")
+#train(model2, 'results_model2.txt')
 
-print("Training Model 8")
-train(model8, 'results_model8.txt')
+#print("Training Model 8")
+#train(model8, 'results_model8.txt')
 
-print("Training Model 4")
-train(model4, 'results_model4.txt')
+#print("Training Model 4")
+#train(model4, 'results_model4.txt')
 
 print("Training Model 6")
 train(model6, 'results_model6.txt')
 
-print("Training Model 3")
-train(model3, 'results_model3.txt')
+#print("Training Model 3")
+#train(model3, 'results_model3.txt')
 
 
 

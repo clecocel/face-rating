@@ -117,6 +117,7 @@ model8= Model(inputs=base_model2.input, outputs=prediction)
 
 #############################################################
 x = base_model2.output
+x = Flatten()(x)
 x = Dense(1024, activation='relu', kernel_regularizer=regularizers.l2(0.01),
                 activity_regularizer=regularizers.l1(0.01))(x)
 x = Dropout(0.4)(x)

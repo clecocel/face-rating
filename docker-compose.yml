@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+
+    backend:
+      build:
+        context: .
+        dockerfile: ./backend/Dockerfile
+      volumes:
+        # App files and config
+        - ./backend/config/uwsgi.ini:/app/uwsgi.ini:ro
+        - ./backend/config/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+        - ./backend/app/main.py:/app/main.py:ro
+        # Library
+        - ./backend:/usr/local/lib/python3.6/site-packages/backend:ro
+        # Data
+        - ./data/:/app/data/:rw
+        # Runners
+        - ./backend/runners/:/app/runners:ro
+        # Linters and Tests
+        - ./backend/tests/:/app/tests:ro
+        # - ./backend/.flake8:/app/.flake8:ro
+        # - ./backend/.coveragerc:/app/.coveragerc:ro
+        # - ./backend/lib/:/app/lib:ro
+        # Entrypoint
+        - ./backend/config/entrypoint.sh:/entrypoint.sh:ro
+      # env_file:
+      #   - .env
+      ports:
+        - 8080:8080

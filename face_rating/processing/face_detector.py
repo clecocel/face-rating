@@ -10,9 +10,9 @@ WHITE = (255, 255, 255)
 
 
 def get_resizing_parameters(image_size, target_size):
-    '''
+    """
     Get width, height and top, bottom, left, right border sizes
-    '''
+    """
     # Image size is (height, width)
     image_width = image_size[1]
     image_height = image_size[0]
@@ -43,9 +43,9 @@ def get_resizing_parameters(image_size, target_size):
 
 
 def resize_keep_aspect_ratio(image, target_size=(224, 224)):
-    '''
+    """
     Resize while maintaining aspect ratio. We fill the borders with a constant grey.
-    '''
+    """
     (resized_width,
      resized_height,
      upper_border,
@@ -67,16 +67,22 @@ def resize_keep_aspect_ratio(image, target_size=(224, 224)):
 
 
 def isolate_faces(image: np.array, target_size=(224, 224)) -> List[np.array]:
+    """
+    Takes an image and returns the faces detected in that image at reshaped to the target_size shape
+    :param image:
+    :param target_size:
+    :return: list of faces
+    """
     face_cascade = cv2.CascadeClassifier('/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(image_gray, 1.3, 5)
-    final_faces = []
+    resized_faces = []
     for (x, y, w, h) in faces:
         face_color = image[max(0, y - int(h * FACE_EXTRA_TOP_PERC)):min(y + int((1 + FACE_EXTRA_TOP_PERC) * h),
                                                                         image.shape[0]),
                      x:x + w]
         if target_size is not None:
             face_color = resize_keep_aspect_ratio(face_color, target_size)
-        final_faces.append(face_color)
-    return final_faces
+        resized_faces.append(face_color)
+    return resized_faces

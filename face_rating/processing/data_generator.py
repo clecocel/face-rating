@@ -16,6 +16,7 @@ IMAGE_COL = 'Image'
 RATING_COL = 'Rating'
 
 RANDOM_STATE = 0
+MAX_RGB_VALUE = 255
 
 
 def load_image(path, target_size=(224, 224)):
@@ -40,17 +41,22 @@ def load_scores(rating_path):
     return series
 
 
-def main(target_size=(224, 224), test_split=0.20, batch_size=32):
+def main(target_size=(224, 224), test_split=0.20, batch_size=32, data_augmentation=True):
     x, y = load_x_y(IMAGES_PATH, RATINGS_PATH, target_size=target_size)
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_split, random_state=RANDOM_STATE)
-    datagen = ImageDataGenerator(
-        rotation_range=20,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        shear_range=0.2,
-        zoom_range=0.2,
-        horizontal_flip=True,
-        fill_mode='nearest')
+    if data_augmentation:
+        datagen = ImageDataGenerator(
+            rotation_range=20,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
+            fill_mode='nearest',
+            rescale=1/MAX_RGB_VALUE,
+        )
+    else:
+        datagen = ImageDataGenerator(rescale=1/MAX_RGB_VALUE)
 
     gen = datagen.flow(x_train, y_train, batch_size=batch_size)
     return gen, x_train.shape[0], (x_test, y_test), x_test.shape[0]

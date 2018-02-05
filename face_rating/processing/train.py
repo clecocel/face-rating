@@ -28,9 +28,35 @@ def train(model, filename=None):
     return history
 
 
+def train_2(model, filename=None):
+    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.95, amsgrad=False)
+    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
+
+    history = model.fit_generator(
+        training_generator,
+        steps_per_epoch=training_samples // BATCH_SIZE,
+        epochs=15,
+        callbacks=None,
+        validation_data=test_set)
+    for layer in model.layers[-10:]:
+        layer.trainable = True
+
+    adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False)
+    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
+
+    history = model.fit_generator(
+        training_generator,
+        steps_per_epoch=training_samples // BATCH_SIZE,
+        epochs=10,
+        callbacks=None,
+        validation_data=test_set)
+    if filename is not None:
+        write_results(filename, history)
+    return history
+
 
 print("Training Model 7")
-train(model7, 'results_model7.txt')
+train_2(model7, 'results_model7.txt')
 
 #print("Training Model 2")
 #train(model2, 'results_model2.txt')

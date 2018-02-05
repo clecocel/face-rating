@@ -6,19 +6,22 @@
 <link rel="stylesheet" href="static/css/styles.css" />
 
 <div class=page>
-  {% block body %}
-  	{% if success %}
-  		<h2>Here are the faces we detected</h2>
-  			<ul class=entries>
-  				{% for result in results %}
-    				<li>This face got a score of {{ result.score }} out of 5</li>
-    				<img src='/static/face_imgs/{{ result.image_path }}' width="500">
-    				<br />
-    				<br />
-    			{% endfor %}
-    		</ul>
-  	{% else %}
-  		<h2>We did not find any face in this image :(</h2>
-    {% endif %}
-  {% endblock %}
+	{% block body %} {% if success %}
+	<h2>Here are the faces we detected</h2>
+	<ul class="entries w3-center">
+		{% for result in results %}
+		<li>This face got a score of {{ result.score }} out of 5</li>
+		<img class="w3-center" src='/static/face_imgs/{{ result.image_path }}' width="50%">
+		<br />
+		<div class="w3-center">
+			<a class="w3-center" href="https://www.facebook.com/sharer/sharer.php?u=google.com/search?q=%22specio.io%22&message=Facebook%20Dialogs%20are%20so%20easy!"
+			 target="_blank">
+				Share your results on Facebook!
+			</a>
+		</div>
+		<br /> {% endfor %}
+	</ul>
+	{% else %}
+	<h2>We did not find any face in this image :(</h2>
+	{% endif %} {% endblock %}
 </div>

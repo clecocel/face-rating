@@ -6,7 +6,7 @@ from keras.optimizers import SGD, Adam
 
 BATCH_SIZE = 32
 
-training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE, data_augmentation=False)
+training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
 
 def write_results(filename, history):
     with open(filename, 'w') as f:
@@ -41,15 +41,16 @@ def train_2(model, filename=None):
     for layer in model.layers[-10:]:
         layer.trainable = True
 
-    adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False)
+    adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.9, amsgrad=False)
     model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
 
     history = model.fit_generator(
         training_generator,
         steps_per_epoch=training_samples // BATCH_SIZE,
-        epochs=10,
+        epochs=20,
         callbacks=None,
         validation_data=test_set)
+
     if filename is not None:
         write_results(filename, history)
     return history

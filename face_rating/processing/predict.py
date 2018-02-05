@@ -35,12 +35,13 @@ def rank_faces_in_image(model: Model, image: np.array, input_size=(224, 224)):
 
 def plot_scores_of_test_image(image_path, model_path):
     image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     model = load_model(model_path)
     faces, y_pred = rank_faces_in_image(model, image)
 
     for f, y in zip(faces, y_pred):
         plt.figure()
-        plt.imshow(cv2.cvtColor(f, cv2.COLOR_BGR2RGB))
+        plt.imshow(f)
         plt.title('Score {:2.1f}/5'.format(y))
         plt.show(block=False)
     plt.show()
@@ -53,7 +54,8 @@ def plot_predicted_scores_of_data_set():
     model_path = '/home/rschucker/Documents/face/data/trained_model/resnet-trained.h5'
     logger.info('Loading model...')
     model = load_model(model_path)
-    step = 550
+    # step = 550
+    step = 1
     x_splits = np.split(x, step)
     y_splits = np.split(y, step)
     for x_split, y_split in zip(x_splits, y_splits):
@@ -61,7 +63,7 @@ def plot_predicted_scores_of_data_set():
         y_pred = y_pred.flatten().tolist()
         for img, true_score, model_score in zip(x_split, y_split, y_pred):
             plt.figure()
-            plt.imshow(img)
+            plt.imshow(np.uint8(img))
             plt.title('True Score {:2.1f}/5, Model Score {:2.1f}/5'.format(true_score, model_score))
             plt.show(block=False)
         plt.show()
@@ -80,5 +82,5 @@ if __name__ == '__main__':
     logs.basicConfig(level=logs.INFO)
     root_logger.setLevel(logs.INFO)
 
-    # main()
-    plot_predicted_scores_of_data_set()
+    main()
+    # plot_predicted_scores_of_data_set()

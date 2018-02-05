@@ -10,16 +10,16 @@ services:
         # Frontend
         - ./frontend/index.html:/app/index.html:ro
         - ./frontend/show_score.html:/app/templates/show_score.html:ro
-        - ./frontend/static/:/app/static/:ro
+        - ./frontend/static/:/app/static/:rw
         # App files and config
         - ./backend/config/uwsgi.ini:/app/uwsgi.ini:ro
         - ./backend/config/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
         - ./backend/app/main.py:/app/main.py:ro
         # xmlLib
-        - ./face_rating/dbhjdbhd.xml:/opt/mdkdnldnldnd.xml
+        - ./face_rating/haarcascade_frontalface_default.xml:/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml:ro
         # Library
-        - ./backend:/usr/local/lib/python3.6/site-packages/backend:ro
-        - ./face_rating:/usr/local/lib/python3.6/site-packages/face_rating:ro
+        - ./backend:/usr/local/lib/python3.5/site-packages/backend:ro
+        - ./face_rating:/usr/local/lib/python3.5/site-packages/face_rating:ro
         # Data
         - ./data/scoring_model.h5:/model/scoring_model.h5
         # Runners

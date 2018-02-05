@@ -1,4 +1,4 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.6
+FROM tiangolo/uwsgi-nginx-flask:python3.5
 
 RUN apt-get -qq update
 RUN apt-get install -y \
@@ -7,6 +7,8 @@ RUN apt-get install -y \
 
 COPY ./backend/requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
+
+RUN pip install h5py
 
 # UWSGI and NGINX configs
 COPY ./backend/config/uwsgi.ini /app/uwsgi.ini

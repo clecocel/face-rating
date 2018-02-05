@@ -76,7 +76,7 @@ def isolate_faces(image: np.array, target_size=(224, 224)) -> List[np.array]:
     """
     face_cascade = cv2.CascadeClassifier(PATH_TO_FACEDETECTOR_XML)
 
-    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     faces = face_cascade.detectMultiScale(image_gray, 1.3, 5)
     resized_faces = []
     for (x, y, w, h) in faces:

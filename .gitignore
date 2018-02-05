@@ -1,2 +1,5 @@
 *.DS_Store
+# Model files
 *.h5
+# Result face images
+frontend/static/face_imgs/*

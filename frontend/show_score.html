@@ -1,0 +1,24 @@
+<!doctype html>
+<title>Face rating</title>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="static/css/styles.css" />
+
+<div class=page>
+  {% block body %}
+  	{% if success %}
+  		<h2>Here are the faces we detected</h2>
+  			<ul class=entries>
+  				{% for result in results %}
+    				<li>This face got a score of {{ result.score }} out of 5</li>
+    				<img src='/static/face_imgs/{{ result.image_path }}' width="500">
+    				<br />
+    				<br />
+    			{% endfor %}
+    		</ul>
+  	{% else %}
+  		<h2>We did not find any face in this image :(</h2>
+    {% endif %}
+  {% endblock %}
+</div>

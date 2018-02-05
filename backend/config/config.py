@@ -1,5 +1,4 @@
 """Configuration management."""
-import os
 import json
 
 _CONFIG = None
@@ -98,6 +97,7 @@ def _load_config(path=None):
 
 
 CONFIG = {
+    'model_path': '/model/scoring_model.h5',
     'logging': {
         'version': 1,
         'disable_existing_loggers': True,
@@ -114,15 +114,10 @@ CONFIG = {
                 'class': 'logging.StreamHandler',
                 'formatter': 'console'
             },
-            'sentry': {
-                'level': 'INFO',
-                'class': 'raven.handlers.logging.SentryHandler',
-                'dsn': os.environ.get('SENTRY_DSN', None),
-            }
         },
         'loggers': {
             'backend': {
-                'handlers': ['console', 'sentry'],
+                'handlers': ['console'],
                 'level': 'DEBUG',
                 'propagate': True,
             },

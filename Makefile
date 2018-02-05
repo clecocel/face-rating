@@ -5,9 +5,9 @@ backend:
 flask-debug:
 	docker-compose run --service-ports backend bash -c "python main.py"
 
-# backend-lint:
-# 	docker-compose run --no-deps backend bash -c "flake8 ."
-# 	docker-compose run --no-deps backend bash -c "pep257 --match-dir '[^\.*data]' ."
+backend-lint:
+	docker-compose run --no-deps backend bash -c "flake8 ."
+	docker-compose run --no-deps backend bash -c "pep257 --match-dir '[^\.*data]' ."
 
 # backend-test:
 # 	docker-compose run --no-deps backend pytest -s tests

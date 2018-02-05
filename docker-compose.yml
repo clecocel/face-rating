@@ -15,18 +15,19 @@ services:
         - ./backend/config/uwsgi.ini:/app/uwsgi.ini:ro
         - ./backend/config/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
         - ./backend/app/main.py:/app/main.py:ro
+        # xmlLib
+        - ./face_rating/dbhjdbhd.xml:/opt/mdkdnldnldnd.xml
         # Library
         - ./backend:/usr/local/lib/python3.6/site-packages/backend:ro
+        - ./face_rating:/usr/local/lib/python3.6/site-packages/face_rating:ro
         # Data
-        - ./face_rating/haarcascade_frontalface_default.xml:/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml
-        - ./data/:/app/data/:rw
+        - ./data/scoring_model.h5:/model/scoring_model.h5
         # Runners
         - ./backend/runners/:/app/runners:ro
         # Linters and Tests
         - ./backend/tests/:/app/tests:ro
-        # - ./backend/.flake8:/app/.flake8:ro
-        # - ./backend/.coveragerc:/app/.coveragerc:ro
-        # - ./backend/lib/:/app/lib:ro
+        - ./backend/.flake8:/app/.flake8:ro
+        - ./backend/.coveragerc:/app/.coveragerc:ro
         # Entrypoint
         - ./backend/config/entrypoint.sh:/entrypoint.sh:ro
       # env_file:

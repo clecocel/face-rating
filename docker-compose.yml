@@ -7,6 +7,10 @@ services:
         context: .
         dockerfile: ./backend/Dockerfile
       volumes:
+        # Frontend
+        - ./frontend/index.html:/app/index.html:ro
+        - ./frontend/show_score.html:/app/templates/show_score.html:ro
+        - ./frontend/static/:/app/static/:ro
         # App files and config
         - ./backend/config/uwsgi.ini:/app/uwsgi.ini:ro
         - ./backend/config/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
@@ -27,4 +31,4 @@ services:
       # env_file:
       #   - .env
       ports:
-        - 8080:8080
+        - 80:8080

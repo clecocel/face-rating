@@ -114,15 +114,10 @@ CONFIG = {
                 'class': 'logging.StreamHandler',
                 'formatter': 'console'
             },
-            'sentry': {
-                'level': 'INFO',
-                'class': 'raven.handlers.logging.SentryHandler',
-                'dsn': os.environ.get('SENTRY_DSN', None),
-            }
         },
         'loggers': {
             'backend': {
-                'handlers': ['console', 'sentry'],
+                'handlers': ['console'],
                 'level': 'DEBUG',
                 'propagate': True,
             },

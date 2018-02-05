@@ -18,6 +18,7 @@ services:
         # Library
         - ./backend:/usr/local/lib/python3.6/site-packages/backend:ro
         # Data
+        - ./face_rating/haarcascade_frontalface_default.xml:/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml
         - ./data/:/app/data/:rw
         # Runners
         - ./backend/runners/:/app/runners:ro

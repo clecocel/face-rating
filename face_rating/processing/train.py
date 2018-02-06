@@ -10,8 +10,13 @@ training_generator, training_samples, test_set, test_samples = main(batch_size=B
 
 def write_results(filename, history):
     with open(filename, 'w') as f:
-        print(history.history['mean_absolute_error'], file=f)
-        print(history.history['val_mean_absolute_error'], file=f)
+        if isinstance(history, list):
+            for hist in history:
+                print(hist.history['mean_absolute_error'], file=f)
+            for hist in history:
+                print(hist.history['val_mean_absolute_error'], file=f)
+        else:
+            write_results(filename, [history])
 
 def train(model, filename=None):
     adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.9, amsgrad=False)
@@ -28,7 +33,7 @@ def train(model, filename=None):
     return history
 
 
-def train_2(model, filename=None):
+def train_2(model, filename=None, layers_second_pass=10):
     adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.95, amsgrad=False)
     model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
 
@@ -38,13 +43,13 @@ def train_2(model, filename=None):
         epochs=15,
         callbacks=None,
         validation_data=test_set)
-    for layer in model.layers[-10:]:
+    for layer in model.layers[-layers_second_pass:]:
         layer.trainable = True
 
     adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.9, amsgrad=False)
     model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
 
-    history = model.fit_generator(
+    history2 = model.fit_generator(
         training_generator,
         steps_per_epoch=training_samples // BATCH_SIZE,
         epochs=20,
@@ -52,12 +57,13 @@ def train_2(model, filename=None):
         validation_data=test_set)
 
     if filename is not None:
-        write_results(filename, history)
+        write_results(filename, [history, history2])
     return history
 
-
-print("Training Model 7")
-train_2(model7, 'results_model7.txt')
+i = 7
+for run in range(5):
+    print("Training Model {}".format(i))
+    train_2(make_model(i), 'results_model{}_run{}.txt'.format(i, run), 10)
 
 #print("Training Model 2")
 #train(model2, 'results_model2.txt')

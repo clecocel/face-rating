@@ -137,11 +137,13 @@ model10 = Model(inputs=base_model2.input, outputs=prediction)
 #############################################################
 
 def make_model(i):
-	if i == 7:
-		base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
-		x = base_model.output
-		x = Flatten()(x)
-		prediction = Dense(1, kernel_regularizer=regularizers.l2(0.02),
+    if i == 7:
+        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+        for layer in base_model.layers:
+            layer.trainable = False
+        x = base_model.output
+        x = Flatten()(x)
+        prediction = Dense(1, kernel_regularizer=regularizers.l2(0.02),
                 activity_regularizer=regularizers.l1(0.02))(x)
-		# this is the model we will train
-		return Model(inputs=base_model.input, outputs=prediction)
+        # this is the model we will train
+        return Model(inputs=base_model.input, outputs=prediction)

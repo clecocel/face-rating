@@ -22,11 +22,15 @@ def write_results(filename, history, **kwargs):
         with open('{}.html'.format(filename), 'w') as f:
             f.write(report)
     else:
-        write_results(filename, [history])
+        write_results(filename, [history], **kwargs)
 
-def train(model, filename=None, lr=0.001, decay=0., epochs=20, loss='mean_squared_error'):
-    adam = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=None, decay=decay, amsgrad=False)
-    model.compile(optimizer=adam, loss=loss, metrics=['mae', 'mse'])
+def train(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=20, loss='mean_squared_error'):
+    if optimizer == 'adam':
+        opt = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=None, decay=decay, amsgrad=False)
+    if optimizer == 'sgd':
+        opt = SGD(lr=lr, decay=decay)
+
+    model.compile(optimizer=opt, loss=loss, metrics=['mae', 'mse'])
 
     history = model.fit_generator(
         training_generator,
@@ -39,6 +43,7 @@ def train(model, filename=None, lr=0.001, decay=0., epochs=20, loss='mean_square
         kwargs = {
             'num_epoch': epochs,
             'fine_tuned_layers': 0,
+            'optimizer': optimizer,
             'learning_rate': lr,
             'decay': decay,
         }

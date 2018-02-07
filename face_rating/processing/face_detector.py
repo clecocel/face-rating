@@ -67,22 +67,36 @@ def resize_keep_aspect_ratio(image, target_size=(224, 224)):
     return image_data
 
 
+def reshape_to_max_dimensions(image: np.array, max_one_dimension_pixel=800) -> np.array:
+    """
+    Make sure image has max(height, width) < MAX_ONE_DIMENSION_PIXEL
+    """
+    scaling = max_one_dimension_pixel / max(image.shape[:2])
+    if scaling < 1.0:
+        image = cv2.resize(image, dsize=(0, 0), fx=scaling, fy=scaling, interpolation=cv2.INTER_CUBIC)
+    return image
+
+
 def isolate_faces(image: np.array, target_size=(224, 224)) -> List[np.array]:
     """
     Takes an image and returns the faces detected in that image at reshaped to the target_size shape
-    :param image:
+    :param image:           RGB ndarray (values from 0 to 255)
     :param target_size:
     :return: list of faces
     """
     face_cascade = cv2.CascadeClassifier(PATH_TO_FACEDETECTOR_XML)
+    # resize image to max of 800 pixels of width/height for better face detection
+    image = reshape_to_max_dimensions(image, max_one_dimension_pixel=800)
 
     image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     faces = face_cascade.detectMultiScale(image_gray, 1.3, 5)
     resized_faces = []
     for (x, y, w, h) in faces:
-        face_color = image[max(0, y - int(h * FACE_EXTRA_TOP_PERC)):min(y + int((1 + FACE_EXTRA_TOP_PERC) * h),
-                                                                        image.shape[0]),
-                     x:x + w]
+        face_color = image[
+                         max(0, y - int(h * FACE_EXTRA_TOP_PERC))
+                         :min(y + int((1 + FACE_EXTRA_TOP_PERC) * h), image.shape[0]),
+                         x:x + w
+                     ]
         if target_size is not None:
             face_color = resize_keep_aspect_ratio(face_color, target_size)
         resized_faces.append(face_color)

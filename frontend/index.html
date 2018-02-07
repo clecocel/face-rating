@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <title>Face Rating</title>
+
 <HEAD>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113568039-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'UA-113568039-1');
-</script>
+  </script>
 </HEAD>
 
 <meta charset="UTF-8">
@@ -98,83 +99,44 @@
   <div class="w3-content w3-container w3-padding-32" id="about">
     <h3 class="w3-center ">ABOUT THE PROJECT</h3>
     <p class="w3-center ">
-      <em> This project was inspired by <a href="https://arxiv.org/pdf/1801.06345v1.pdf">this paper</a> [1].
-      The underlying algorithm was trained on the dataset described in [1] and thus will suffer from a lack of
-      diversity and might result in unpredictable outcomes or biases as it is a mere reflection of the training dataset
+      <em> This project was inspired by
+        <a href="https://arxiv.org/pdf/1801.06345v1.pdf">this paper</a> [1]. The underlying algorithm was trained on the dataset described in [1] and thus will suffer from
+        a lack of diversity and might result in unpredictable outcomes or biases as it is a mere reflection of the training
+        dataset
       </em>
     </p>
     <p class="w3-center ">With this in mind, upload a picture an enjoy being judged by a computer!</p>
+    <br>
+    <div class="w3-center">
+      <a class="w3-center" href="http://www.facebook.com/sharer/sharer.php?u=https://www.w3schools.com/w3images/parallax1.jpg&quote=SPECIO"
+        target="_blank">
+        Share on Facebook!
+      </a>
+    </div>
+
   </div>
 
   <!-- Container (Image Uploader Section) -->
   <div class="w3-content w3-container w3-padding-32" id="uploader">
-    <h3 class="w3-center">UPLOAD AN IMAGE</h3>
     <form class="w3-center" method=post enctype=multipart/form-data action='/score'>
-      <p>
-        <input type=file name=file>
-        <input class="w3-white" type=submit value=Upload>
+      <h3>
+        <label for="file" class="custom-file-upload">UPLOAD AN IMAGE
+          <br>
+          <input id="file" name="file" type="file" style="display: none;" />
+          <i class="fa fa-cloud-upload"></i>
+        </label>
+        <h3>
+          <script>
+            $('form input').change(function () {
+              console.log($(this))
+              $(this).closest('form').submit();
+              // Reset to avoid reload on "Previous".
+              $(this).val('');
+              console.log($(this))
+            });
+          </script>
     </form>
-    <!-- <form method="post" enctype="multipart/form-data">
-      <div>
-        <label for="image_uploads">Choose images to upload (PNG, JPG)</label>
-        <br>
-        <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple>
-      </div>
-      <div class="preview">
-        <p>No files currently selected for upload</p>
-      </div>
-      <div>
-        <button>Submit</button>
-      </div>
-    </form> -->
   </div>
-
-  <!-- Footer -->
-  <!-- <footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off ">
-    <a href="#home " class="w3-button w3-light-grey ">
-      <i class="fa fa-arrow-up w3-margin-right "></i>To the top</a>
-    <div class="w3-xlarge w3-section ">
-      <i class="fa fa-facebook-official w3-hover-opacity "></i>
-      <i class="fa fa-instagram w3-hover-opacity "></i>
-      <i class="fa fa-snapchat w3-hover-opacity "></i>
-      <i class="fa fa-pinterest-p w3-hover-opacity "></i>
-      <i class="fa fa-twitter w3-hover-opacity "></i>
-      <i class="fa fa-linkedin w3-hover-opacity "></i>
-    </div>
-    <p>Powered by
-      <a href="https://www.w3schools.com/w3css/default.asp " title="W3.CSS " target="_blank " class="w3-hover-text-green ">w3.css</a>
-    </p>
-  </footer> -->
-
-  <!-- Add Google Maps -->
-  <script>
-    function myMap() {
-      myCenter = new google.maps.LatLng(41.878114, -87.629798);
-      var mapOptions = {
-        center: myCenter,
-        zoom: 12, scrollwheel: false, draggable: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-      var map = new google.maps.Map(document.getElementById("googleMap "), mapOptions);
-
-      var marker = new google.maps.Marker({
-        position: myCenter,
-      });
-      marker.setMap(map);
-    }
-
-    // Modal Image Gallery
-    function onClick(element) {
-      document.getElementById("img01 ").src = element.src;
-      document.getElementById("modal01 ").style.display = "block ";
-      var captionText = document.getElementById("caption ");
-      captionText.innerHTML = element.alt;
-    }
-  </script>
-  <!--
-To use this code on your website, get a free API key from Google.
-Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
--->
 
 </body>
 

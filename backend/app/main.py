@@ -43,10 +43,13 @@ SCORING_MODEL = load_model(config.get('model_path'))
 logger = logging.getLogger(__name__)
 
 
-def save_images(images):
+def save_images(images, scores):
     paths = []
-    for image in images:
-        filename = '{}.jpg'.format(secure_filename(str(hash(time.time()))))
+    for i, image in enumerate(images):
+        filename = '{}_{:2.1f}.jpg'.format(
+            secure_filename(str(hash(time.time()))),
+            scores[i]
+        )
         img = cv2.cvtColor(np.uint8(image), cv2.COLOR_RGB2BGR)
         upload_folder = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         print('Upload folder', upload_folder)
@@ -74,7 +77,29 @@ def main_page():
         return flask.Response(content, mimetype='text/html')
 
 
-@app.route('/score', methods=['POST'])
+def image_is_available(id):
+    """Check if an image has been save for this id is available."""
+    # FIXME - Implement!
+    return True
+
+
+@app.route('/share', methods=['GET'])
+def share_image():
+    """Fetch and return."""
+    if flask.request.method == 'GET':
+        if 'id' in flask.request.args and image_is_available(flask.request.args['id']):
+            file_id = flask.request.args['id'] + '.jpg'
+            score = flask.request.args['id'].split('_')[-1]
+            return flask.render_template(
+                'share_score.html', result={
+                    'score': score,
+                    'image_path': file_id
+                })
+    # If no correct file is posted, go back to the main page.
+    return flask.redirect("/", code=302)
+
+
+@app.route('/score', methods=['GET', 'POST'])
 def score():
     logger.info('Scoring image...')
     if flask.request.method == 'POST':
@@ -86,13 +111,19 @@ def score():
             if not results:
                 return flask.render_template('show_score.html', success=False)
             images, scores = results
-            image_paths = save_images(images)
+            image_paths = save_images(images, scores)
             print(image_paths)
             # TODO - Store images
             # TODO - Expose list and not simply score
             return flask.render_template(
                 'show_score.html', results=[
-                    {'score': '{:2.1f}'.format(score), 'image_path': path} for score, path in zip(scores, image_paths)], success=True)
+                    {
+                        'score': '{:2.1f}'.format(score),
+                        'image_path': path
+                    } for score, path in zip(scores, image_paths)
+                ], success=True)
+    # If no correct file is posted, go back to the main page.
+    return flask.redirect("/", code=302)
 
 
 def allowed_file(filename):

@@ -1,0 +1,33 @@
+<!doctype html>
+<title>Face rating</title>
+
+<HEAD>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113568039-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-113568039-1');
+    </script>
+</HEAD>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="static/css/styles.css" />
+
+<div class="page w3-center">
+    {% block body %}
+    <h2 class="w3-center">Here Is My Score!</h2>
+    <br>
+    <h3>I got a score of {{ result.score }} / 5</h3>
+    <img class="w3-center" src='/static/face_imgs/{{ result.image_path }}' width="50%">
+    <br>
+    <h3 class="w3-center">
+        <a class="w3-center" href="/" target="_blank">
+            Upload your own pricture!
+        </a>
+    </h3>
+    {% endblock %}
+</div>

@@ -1,15 +1,16 @@
 <!doctype html>
 <title>Face rating</title>
-<HEAD>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113568039-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-113568039-1');
-</script>
+<HEAD>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-113568039-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-113568039-1');
+	</script>
 </HEAD>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -17,19 +18,22 @@
 <link rel="stylesheet" href="static/css/styles.css" />
 
 <div class=page>
-  {% block body %}
-  	{% if success %}
-  		<h2>Here are the faces we detected</h2>
-  			<ul class=entries>
-  				{% for result in results %}
-    				<li>This face got a score of {{ result.score }} out of 5</li>
-    				<img src='/static/face_imgs/{{ result.image_path }}' width="500">
-    				<br />
-    				<br />
-    			{% endfor %}
-    		</ul>
-  	{% else %}
-  		<h2>We did not find any face in this image :(</h2>
-    {% endif %}
-  {% endblock %}
+	{% block body %} {% if success %}
+	<h2 class="w3-center">Here are the faces we detected</h2>
+	<ul class="entries w3-center">
+		{% for result in results %}
+		<h3 class="w3-center">This face got a score of {{ result.score }} / 5</h3>
+		<img class="w3-center" src='/static/face_imgs/{{ result.image_path }}' width="50%" />
+		<br>
+		<h3 class="w3-center">
+			<a class="w3-center" href="https://www.facebook.com/sharer/sharer.php?u=specio.io/share?id={{ result.image_path }}&message=Specio%20Rocks!"
+			 target="_blank">
+				Share your results on Facebook
+			</a>
+		</h3>
+		<br> {% endfor %}
+	</ul>
+	{% else %}
+	<h2 class="w3-center">We did not find any face in this image :(</h2>
+	{% endif %} {% endblock %}
 </div>

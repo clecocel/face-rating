@@ -11,19 +11,18 @@ training_generator, training_samples, test_set, test_samples = main(
     batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
 
 def write_results(filename, history, **kwargs):
-    with open(filename, 'w') as f:
-        if isinstance(history, list):
-            training_error = []
-            for hist in history:
-                training_error += hist.history['mean_absolute_error']
-            validation_error = []
-            for hist in history:
-                validation_error += hist.history['val_mean_absolute_error']
-            report = generate_train_report(training_error, validation_error, filename, **kwargs)
-            with open('{}.html'.format(filename), 'w') as f:
-                f.write(report)
-        else:
-            write_results(filename, [history])
+    if isinstance(history, list):
+        training_error = []
+        for hist in history:
+            training_error += hist.history['mean_absolute_error']
+        validation_error = []
+        for hist in history:
+            validation_error += hist.history['val_mean_absolute_error']
+        report = generate_train_report(training_error, validation_error, filename, **kwargs)
+        with open('{}.html'.format(filename), 'w') as f:
+            f.write(report)
+    else:
+        write_results(filename, [history])
 
 def train(model, filename=None, lr=0.001, decay=0., epochs=20, loss='mean_squared_error'):
     adam = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=None, decay=decay, amsgrad=False)
@@ -52,11 +51,11 @@ def train(model, filename=None, lr=0.001, decay=0., epochs=20, loss='mean_square
 PATH_PREFIX = 'train_first_pass_mse'
 
 
-model_nb = 7
+model_nb = 8
 for run in range(1, 11):
     print("Training Model {}".format(model_nb))
     train(make_model(model_nb), './{}/results_model{}_run{}'.format(
-        PATH_PTREFIX, model_nb, run), 10)
+        PATH_PREFIX, model_nb, run), 10)
 
 
 

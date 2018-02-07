@@ -55,7 +55,7 @@ PATH_PREFIX = 'train_first_pass_mse'
 model_nb = 7
 for run in range(1, 11):
     print("Training Model {}".format(model_nb))
-    train_2(make_model(model_nb), './{}/results_model{}_run{}'.format(
+    train(make_model(model_nb), './{}/results_model{}_run{}'.format(
         PATH_PTREFIX, model_nb, run), 10)
 
 

@@ -87,22 +87,19 @@ def image_is_available(id):
 def share_image():
     """Fetch and return."""
     if flask.request.method == 'GET':
-        print(flask.request.args)
-        if 'id' not in flask.request.args or not image_is_available(flask.request.args['id']):
-            flask.render_template(
-                'show_score.html', success=False)
-        file_id = flask.request.args['id'] + '.jpg'
-        score = flask.request.args['id'].split('_')[-1]
-        return flask.render_template(
-            'show_score.html', results=[
-                {
+        if 'id' in flask.request.args and image_is_available(flask.request.args['id']):
+            file_id = flask.request.args['id'] + '.jpg'
+            score = flask.request.args['id'].split('_')[-1]
+            return flask.render_template(
+                'share_score.html', result={
                     'score': score,
                     'image_path': file_id
-                }
-            ], success=True)
+                })
+    # If no correct file is posted, go back to the main page.
+    return flask.redirect("/", code=302)
 
 
-@app.route('/score', methods=['POST'])
+@app.route('/score', methods=['GET', 'POST'])
 def score():
     logger.info('Scoring image...')
     if flask.request.method == 'POST':
@@ -125,6 +122,8 @@ def score():
                         'image_path': path
                     } for score, path in zip(scores, image_paths)
                 ], success=True)
+    # If no correct file is posted, go back to the main page.
+    return flask.redirect("/", code=302)
 
 
 def allowed_file(filename):

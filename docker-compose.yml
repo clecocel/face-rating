@@ -10,6 +10,7 @@ services:
         # Frontend
         - ./frontend/index.html:/app/index.html:ro
         - ./frontend/show_score.html:/app/templates/show_score.html:ro
+        - ./frontend/share_score.html:/app/templates/share_score.html:ro
         - ./frontend/static/:/app/static/:rw
         # App files and config
         - ./backend/config/uwsgi.ini:/app/uwsgi.ini:ro

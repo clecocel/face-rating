@@ -7,7 +7,8 @@ from train_report_generator import generate_train_report
 
 BATCH_SIZE = 32
 
-training_generator, training_samples, test_set, test_samples = main(batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
+training_generator, training_samples, test_set, test_samples = main(
+    batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
 
 def write_results(filename, history, **kwargs):
     with open(filename, 'w') as f:
@@ -53,7 +54,7 @@ PATH_PREFIX = 'train_first_pass_mse'
 
 model_nb = 7
 for run in range(1, 11):
-    print("Training Model {}".format(i))
+    print("Training Model {}".format(model_nb))
     train_2(make_model(model_nb), './{}/results_model{}_run{}'.format(
         PATH_PTREFIX, model_nb, run), 10)
 

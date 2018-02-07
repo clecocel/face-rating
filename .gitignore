@@ -3,3 +3,4 @@
 *.h5
 # Result face images
 frontend/static/face_imgs/*
+*.pyc

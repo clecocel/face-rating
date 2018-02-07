@@ -9,6 +9,7 @@ COPY ./backend/requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
 
 RUN pip install h5py
+RUN pip install Pillow
 
 # UWSGI and NGINX configs
 COPY ./backend/config/uwsgi.ini /app/uwsgi.ini

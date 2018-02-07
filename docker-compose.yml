@@ -19,9 +19,10 @@ services:
         - ./face_rating/haarcascade_frontalface_default.xml:/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml:ro
         # Library
         - ./backend:/usr/local/lib/python3.5/site-packages/backend:ro
-        - ./face_rating:/usr/local/lib/python3.5/site-packages/face_rating:ro
+        - ./face_rating:/usr/local/lib/python3.5/site-packages/face_rating:rw
         # Data
         - ./data/scoring_model.h5:/model/scoring_model.h5
+        - ~/Downloads/SCUT-FBP5500:/home/ubuntu/dataset/SCUT-FBP5500:rw
         # Runners
         - ./backend/runners/:/app/runners:ro
         # Linters and Tests

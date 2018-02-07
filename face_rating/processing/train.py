@@ -7,6 +7,8 @@ from train_report_generator import generate_train_report
 
 BATCH_SIZE = 32
 
+print('Data generation.')
+
 training_generator, training_samples, test_set, test_samples = main(
     batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
 
@@ -63,7 +65,7 @@ for run in range(1, 11):
             make_model(model_nb),
             filename='./{}/results_model{}_lr{}_run{}'.format(PATH_PREFIX, model_nb, lr, run),
             lr=lr,
-            epochs=10)
+            epochs=1)
 
 
 

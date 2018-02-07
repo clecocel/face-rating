@@ -11,7 +11,7 @@ import base64
 from io import BytesIO
 
 
-def generate_train_report(train_errors, val_errors, title, moving_average_train_error=3, **kwargs):
+def generate_train_report(train_errors, val_errors, title, training_parameters, moving_average_train_error=3):
     html_strs = []
     html_strs.append('''
         <!DOCTYPE html>
@@ -24,7 +24,8 @@ def generate_train_report(train_errors, val_errors, title, moving_average_train_
     html_strs.append('''
             <h3>Model training parameters</h3>
             <table>''')
-    for k, v in sorted(kwargs.items()):
+    print(training_parameters)
+    for k, v in sorted(training_parameters.items()):
         html_strs.append('<tr><td>{} = </td><td>{}</td></tr>\n'.format(k, v))
 
     html_strs.append('''
@@ -79,7 +80,8 @@ def main():
         'elapsed_time_sec': 400,
     }
     title = 'Model 7 test'
-    html_report = generate_train_report(train_errors, val_errors, title, **kwargs)
+    html_report = generate_train_report(
+        train_errors, val_errors, title, training_parameters=kwargs)
     with open('{}.html'.format(title), mode='w') as report:
         report.write(html_report)
 

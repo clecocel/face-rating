@@ -12,7 +12,10 @@ print('Data generation.')
 training_generator, training_samples, test_set, test_samples = main(
     batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
 
-def write_results(filename, history, **kwargs):
+
+def write_results(filename, history, training_parameters):
+    print('Writing results to file')
+    print(training_parameters)
     if isinstance(history, list):
         training_error = []
         for hist in history:
@@ -20,11 +23,17 @@ def write_results(filename, history, **kwargs):
         validation_error = []
         for hist in history:
             validation_error += hist.history['val_mean_absolute_error']
-        report = generate_train_report(training_error, validation_error, filename, **kwargs)
+        report = generate_train_report(
+            training_error,
+            validation_error,
+            filename,
+            training_parameters=training_parameters
+        )
         with open('{}.html'.format(filename), 'w') as f:
             f.write(report)
     else:
-        write_results(filename, [history])
+        write_results(filename, [history], training_parameters=training_parameters)
+
 
 def train(model, filename=None, lr=0.001, decay=0., epochs=20, loss='mean_squared_error'):
     adam = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=None, decay=decay, amsgrad=False)
@@ -38,16 +47,14 @@ def train(model, filename=None, lr=0.001, decay=0., epochs=20, loss='mean_square
         validation_data=test_set)
 
     if filename is not None:
-        kwargs = {
+        training_parameters = {
             'num_epoch': epochs,
             'fine_tuned_layers': 0,
             'learning_rate': lr,
             'decay': decay,
         }
-        write_results(filename, history, **kwargs)
+        write_results(filename, history, training_parameters)
     return history
-
-
 
 
 PATH_PREFIX = 'train_first_pass_mse'

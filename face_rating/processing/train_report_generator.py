@@ -60,7 +60,7 @@ def create_html_plot(train_errors, val_errors, title):
     plt.plot(np.arange(len(val_errors)), np.array(val_errors), c='b')
 
     plt.title('train loss (green) and val loss (blue) for run: {}'.format(title))
-    plt.ylim([0.0, 1.5])
+    plt.ylim([0.0, max(train_errors + val_errors)])
     figfile = BytesIO()
     plt.savefig(figfile, format='png')
     figfile.seek(0)

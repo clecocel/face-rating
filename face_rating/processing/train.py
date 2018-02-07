@@ -52,10 +52,18 @@ PATH_PREFIX = 'train_first_pass_mse'
 
 
 model_nb = 8
+
+
+learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
+
 for run in range(1, 11):
-    print("Training Model {}".format(model_nb))
-    train(make_model(model_nb), './{}/results_model{}_run{}'.format(
-        PATH_PREFIX, model_nb, run), 10)
+    for lr in learning_rates:
+        print("Training Model {} - learning rate {}".format(model_nb, lr))
+        train(
+            make_model(model_nb),
+            filename='./{}/results_model{}_lr{}_run{}'.format(PATH_PREFIX, model_nb, lr, run),
+            lr=lr,
+            epochs=10)
 
 
 

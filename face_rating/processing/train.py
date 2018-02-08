@@ -54,21 +54,23 @@ def train(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=20,
 
 
 PATH_PREFIX = 'train_first_pass_mse'
-model_nb = 7
+model_nbs = [9, 10, 11, 12]
+opt = 'adam'
 
 
 # learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 learning_rates = [0.001]
 
 for run in range(1, 11):
-    for lr in learning_rates:
-        print("Training Model {} - learning rate {}".format(model_nb, lr))
-        train(
-            make_model(model_nb),
-            filename='./{}/results_model{}_lr{}_run{}'.format(PATH_PREFIX, model_nb, lr, run),
-            lr=lr,
-            epochs=30,
-            optimizer='sgd')
+    for model_nb in model_nbs:
+        for lr in learning_rates:
+            print("Training Model {} - learning rate {} - run {}".format(model_nb, lr, run))
+            train(
+                make_model(model_nb),
+                filename='./{}/results_model{}_{}_lr{}_run{}'.format(PATH_PREFIX, model_nb, opt, lr, run),
+                lr=lr,
+                epochs=30,
+                optimizer=opt)
 
 
 

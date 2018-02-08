@@ -147,6 +147,46 @@ def make_model(i):
                 activity_regularizer=regularizers.l1(0.02))(x)
         # this is the model we will train
         return Model(inputs=base_model.input, outputs=prediction)
+    if i == 9:
+        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+        for layer in base_model.layers:
+            layer.trainable = False
+        x = base_model.output
+        x = Flatten()(x)
+        prediction = Dense(1, kernel_regularizer=regularizers.l2(0.01),
+                activity_regularizer=regularizers.l1(0.01))(x)
+        # this is the model we will train
+        return Model(inputs=base_model.input, outputs=prediction)
+    if i == 10:
+        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+        for layer in base_model.layers:
+            layer.trainable = False
+        x = base_model.output
+        x = Flatten()(x)
+        prediction = Dense(1, kernel_regularizer=regularizers.l2(0.03),
+                activity_regularizer=regularizers.l1(0.03))(x)
+        # this is the model we will train
+        return Model(inputs=base_model.input, outputs=prediction)
+    if i == 11:
+        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+        for layer in base_model.layers:
+            layer.trainable = False
+        x = base_model.output
+        x = Flatten()(x)
+        prediction = Dense(1, kernel_regularizer=regularizers.l2(0.04),
+                activity_regularizer=regularizers.l1(0.04))(x)
+        # this is the model we will train
+        return Model(inputs=base_model.input, outputs=prediction)
+    if i == 12:
+        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
+        for layer in base_model.layers:
+            layer.trainable = False
+        x = base_model.output
+        x = Flatten()(x)
+        prediction = Dense(1, kernel_regularizer=regularizers.l2(0.05),
+                activity_regularizer=regularizers.l1(0.05))(x)
+        # this is the model we will train
+        return Model(inputs=base_model.input, outputs=prediction)
     if i == 8:
         base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224,224,3))
         for layer in base_model.layers:

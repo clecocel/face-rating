@@ -53,14 +53,12 @@ def train(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=20,
 
 
 
-PATH_PREFIX = 'train_first_pass_mse_sgd'
+PATH_PREFIX = 'train_first_pass_mse'
+model_nb = 7
 
 
-model_nb = 8
-
-
-learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
-# learning_rates = [0.001]
+# learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
+learning_rates = [0.001]
 
 for run in range(1, 11):
     for lr in learning_rates:

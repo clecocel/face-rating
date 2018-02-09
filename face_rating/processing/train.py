@@ -50,57 +50,69 @@ def train(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=20,
         write_results(filename, history, **kwargs)
     return history
 
+def train_2(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=20, loss='mean_squared_error', train_last_layers=1):
+    if optimizer == 'adam':
+        opt = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=None, decay=decay, amsgrad=False)
+    if optimizer == 'sgd':
+        opt = SGD(lr=lr, decay=decay)
+
+    model.compile(optimizer=opt, loss=loss, metrics=['mae', 'mse'])
+
+    history = model.fit_generator(
+        training_generator,
+        steps_per_epoch=training_samples // BATCH_SIZE,
+        epochs=epochs,
+        callbacks=None,
+        validation_data=test_set)
+
+    for layer in model.layers[-train_last_layers:]:
+        layer.trainable = True
+
+    opt = Adam(lr=0.0005, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.1, amsgrad=False)
+    model.compile(optimizer=opt, loss=loss, metrics=['mae', 'mse'])
+
+    history_2 = model.fit_generator(
+        training_generator,
+        steps_per_epoch=training_samples // BATCH_SIZE,
+        epochs=epochs,
+        callbacks=None,
+        validation_data=test_set)
+
+    if filename is not None:
+        kwargs = {
+            'num_epoch': epochs,
+            'fine_tuned_layers': 0,
+            'optimizer': optimizer,
+            'learning_rate': lr,
+            'decay': decay,
+        }
+        write_results(filename, [history, history_2], **kwargs)
+        model.save(filename + '.h5')
+    return history
 
 
 
-PATH_PREFIX = 'train_first_pass_mse'
-model_nbs = [9, 10, 11, 12]
+
+PATH_PREFIX = 'train_last_layers_mse'
+model_nbs = [10]
 opt = 'adam'
 
 
 # learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 learning_rates = [0.001]
+last_layers = [10, 20, 30]
 
 for run in range(1, 11):
     for model_nb in model_nbs:
         for lr in learning_rates:
-            print("Training Model {} - learning rate {} - run {}".format(model_nb, lr, run))
-            train(
-                make_model(model_nb),
-                filename='./{}/results_model{}_{}_lr{}_run{}'.format(PATH_PREFIX, model_nb, opt, lr, run),
-                lr=lr,
-                epochs=30,
-                optimizer=opt)
-
-
-
-
-
-'''
-def train_2(model, filename=None, layers_second_pass=10):
-    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.95, amsgrad=False)
-    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
-
-    history = model.fit_generator(
-        training_generator,
-        steps_per_epoch=training_samples // BATCH_SIZE,
-        epochs=15,
-        callbacks=None,
-        validation_data=test_set)
-    for layer in model.layers[-layers_second_pass:]:
-        layer.trainable = True
-
-    adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.9, amsgrad=False)
-    model.compile(optimizer=adam, loss='mean_squared_error', metrics=['mae', 'mse'])
-
-    history2 = model.fit_generator(
-        training_generator,
-        steps_per_epoch=training_samples // BATCH_SIZE,
-        epochs=20,
-        callbacks=None,
-        validation_data=test_set)
-
-    if filename is not None:
-        write_results(filename, [history, history2])
-    return history
-'''
+            for last_layer in last_layers:
+                print("Training Model {} - learning rate {} - run {} - last {} layers".format(
+                    model_nb, lr, run, last_layer))
+                train_2(
+                    make_model(model_nb),
+                    filename='./{}/results_model{}_{}_lr{}_run{}_last{}'.format(
+                        PATH_PREFIX, model_nb, opt, lr, run, last_layer),
+                    lr=lr,
+                    epochs=30,
+                    optimizer=opt,
+                    train_last_layers=last_layer)

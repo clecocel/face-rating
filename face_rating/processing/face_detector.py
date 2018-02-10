@@ -6,6 +6,7 @@ import numpy as np
 import cv2
 
 FACE_EXTRA_TOP_PERC = 0.25  # Percentage of extra pixels to include on top of face
+FACE_EXTRA_SIDE_PERC = 0.15  # Percentage of extra pixels to include on sides of face
 WHITE = (255, 255, 255)
 PATH_TO_FACEDETECTOR_XML = '/opt/opencv/data/haarcascades/haarcascade_frontalface_default.xml'
 
@@ -95,7 +96,7 @@ def isolate_faces(image: np.array, target_size=(224, 224)) -> List[np.array]:
         face_color = image[
                          max(0, y - int(h * FACE_EXTRA_TOP_PERC))
                          :min(y + int((1 + FACE_EXTRA_TOP_PERC) * h), image.shape[0]),
-                         x:x + w
+                         x - int(w * FACE_EXTRA_SIDE_PERC):x + w + int(w * FACE_EXTRA_SIDE_PERC)
                      ]
         if target_size is not None:
             face_color = resize_keep_aspect_ratio(face_color, target_size)

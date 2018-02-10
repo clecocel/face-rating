@@ -30,7 +30,12 @@ def rank_faces_in_image(model: Model, image: np.array, input_size=(224, 224)):
     x = np.array(faces)
     y_pred = model.predict(x)
     y_pred = y_pred.flatten().tolist()
-    return faces, y_pred
+    polarized_scores = [polarize(score) for score in y_pred]
+    return faces, polarized_scores
+
+def polarize(score):
+    ''' Polarize the score for more fun :) '''
+    return np.clip(2.5 + (score - 2.58) * 3, 0, 5)
 
 
 def plot_scores_of_test_image(image_path, model_path):

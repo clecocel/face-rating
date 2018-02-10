@@ -18,7 +18,8 @@ def write_results(filename, history, **kwargs):
             training_error += hist.history['mean_absolute_error']
         validation_error = []
         for hist in history:
-            validation_error += hist.history['val_mean_absolute_error']
+            if 'val_mean_absolute_error' in hist.history:
+                validation_error += hist.history['val_mean_absolute_error']
         report = generate_train_report(training_error, validation_error, filename, **kwargs)
         with open('{}.html'.format(filename), 'w') as f:
             f.write(report)
@@ -128,7 +129,7 @@ learning_rates = [0.001]
 last_layers = [10, 20]
 fine_tuning = True
 
-fine_tune_filename = PATH_PREFIX + 'results_model10_adam_lr0.001_run1_last20'
+fine_tune_filename = PATH_PREFIX + '/results_model10_adam_lr0.001_run1_last20'
 
 if not fine_tuning:
     for run in range(1, 11):

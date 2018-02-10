@@ -3,6 +3,7 @@
 from data_generator import main
 from resnet import *
 from keras.optimizers import SGD, Adam
+from keras.models import load_model
 from train_report_generator import generate_train_report
 
 BATCH_SIZE = 32
@@ -91,7 +92,29 @@ def train_2(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=2
     return history
 
 
-def fine_tune(model):
+def fine_tune(filename):
+    model = load_model(filename + '.h5')
+
+    training_generator, training_samples, test_set, test_samples = main(
+        batch_size=BATCH_SIZE, data_augmentation=True, test_split=0)
+
+    opt = Adam(lr=0.0005, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.05, amsgrad=False)
+    model.compile(optimizer=opt, loss='mean_squared_error', metrics=['mae', 'mse'])
+
+    history = model.fit_generator(
+        training_generator,
+        steps_per_epoch=training_samples // BATCH_SIZE,
+        epochs=20,
+        callbacks=None)
+
+    kwargs = {
+        'num_epoch': 20,
+        'optimizer': 'adam',
+        'learning_rate': '0.0005',
+        'decay': '0.05',
+    }
+    write_results(filename + 'fine_tuned', history, **kwargs)
+    model.save(filename + 'fine_tuned.h5')
     pass
 
 
@@ -103,18 +126,24 @@ opt = 'adam'
 # learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 learning_rates = [0.001]
 last_layers = [10, 20]
+fine_tuning = True
 
-for run in range(1, 11):
-    for model_nb in model_nbs:
-        for lr in learning_rates:
-            for last_layer in last_layers:
-                print("Training Model {} - learning rate {} - run {} - last {} layers".format(
-                    model_nb, lr, run, last_layer))
-                train_2(
-                    make_model(model_nb),
-                    filename='./{}/results_model{}_{}_lr{}_run{}_last{}'.format(
-                        PATH_PREFIX, model_nb, opt, lr, run, last_layer),
-                    lr=lr,
-                    epochs=30,
-                    optimizer=opt,
-                    train_last_layers=last_layer)
+fine_tune_filename = PATH_PREFIX + 'results_model10_adam_lr0.001_run1_last20'
+
+if not fine_tuning:
+    for run in range(1, 11):
+        for model_nb in model_nbs:
+            for lr in learning_rates:
+                for last_layer in last_layers:
+                    print("Training Model {} - learning rate {} - run {} - last {} layers".format(
+                        model_nb, lr, run, last_layer))
+                    train_2(
+                        make_model(model_nb),
+                        filename='./{}/results_model{}_{}_lr{}_run{}_last{}'.format(
+                            PATH_PREFIX, model_nb, opt, lr, run, last_layer),
+                        lr=lr,
+                        epochs=30,
+                        optimizer=opt,
+                        train_last_layers=last_layer)
+else:
+    fine_tune(fine_tune_filename)

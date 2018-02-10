@@ -1,6 +1,8 @@
 """Routing for backend API."""
 import time
 
+import hashlib
+
 import logging
 
 import os
@@ -10,6 +12,8 @@ import numpy as np
 import io
 
 import cv2
+
+import random
 
 from logging.config import dictConfig
 
@@ -46,8 +50,11 @@ logger = logging.getLogger(__name__)
 def save_images(images, scores):
     paths = []
     for i, image in enumerate(images):
+        hash_ = hashlib.sha1(str(time.time()).encode('utf-8')).hexdigest()[:12]
+        salt = str(hash(random.random()))[:3]
+        filename = hash_ + salt
         filename = '{}_{:2.1f}.jpg'.format(
-            secure_filename(str(hash(time.time()))),
+            secure_filename(filename),
             scores[i]
         )
         img = cv2.cvtColor(np.uint8(image), cv2.COLOR_RGB2BGR)
@@ -77,24 +84,29 @@ def main_page():
         return flask.Response(content, mimetype='text/html')
 
 
-def image_is_available(id):
+def image_is_available(filename):
     """Check if an image has been save for this id is available."""
     # FIXME - Implement!
-    return True
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    return os.path.isfile(file_path)
+
 
 
 @app.route('/share', methods=['GET'])
 def share_image():
     """Fetch and return."""
     if flask.request.method == 'GET':
-        if 'id' in flask.request.args and image_is_available(flask.request.args['id']):
-            file_id = flask.request.args['id'] + '.jpg'
-            score = flask.request.args['id'].split('_')[-1]
-            return flask.render_template(
-                'share_score.html', result={
-                    'score': score,
-                    'image_path': file_id
-                })
+        if 'id' in flask.request.args:
+            file_id = flask.request.args['id']
+            if not file_id.endswith('.jpg'):
+                file_id = flask.request.args['id'] + '.jpg'
+            if image_is_available(flask.request.args['id']):
+                score = flask.request.args['id'].split('_')[-1].rstrip('.jpg')
+                return flask.render_template(
+                    'share_score.html', result={
+                        'score': score,
+                        'image_path': file_id
+                    })
     # If no correct file is posted, go back to the main page.
     return flask.redirect("/", code=302)
 

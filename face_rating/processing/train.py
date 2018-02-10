@@ -8,7 +8,7 @@ from train_report_generator import generate_train_report
 BATCH_SIZE = 32
 
 training_generator, training_samples, test_set, test_samples = main(
-    batch_size=BATCH_SIZE, data_augmentation=False, test_split=0.4)
+    batch_size=BATCH_SIZE, data_augmentation=True, test_split=0.4)
 
 def write_results(filename, history, **kwargs):
     if isinstance(history, list):
@@ -74,7 +74,7 @@ def train_2(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=2
     history_2 = model.fit_generator(
         training_generator,
         steps_per_epoch=training_samples // BATCH_SIZE,
-        epochs=epochs,
+        epochs=10,
         callbacks=None,
         validation_data=test_set)
 
@@ -91,16 +91,18 @@ def train_2(model, filename=None, optimizer='adam', lr=0.001, decay=0., epochs=2
     return history
 
 
+def fine_tune(model):
+    pass
 
 
-PATH_PREFIX = 'train_last_layers_mse'
+PATH_PREFIX = 'train_last_layers_mse_augmentation_on'
 model_nbs = [10]
 opt = 'adam'
 
 
 # learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 learning_rates = [0.001]
-last_layers = [10, 20, 30]
+last_layers = [10, 20]
 
 for run in range(1, 11):
     for model_nb in model_nbs:

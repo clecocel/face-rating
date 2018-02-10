@@ -88,8 +88,10 @@ def share_image():
     """Fetch and return."""
     if flask.request.method == 'GET':
         if 'id' in flask.request.args and image_is_available(flask.request.args['id']):
-            file_id = flask.request.args['id'] + '.jpg'
-            score = flask.request.args['id'].split('_')[-1]
+            file_id = flask.request.args['id']
+            if not file_id.endswith('.jpg'):
+                file_id = flask.request.args['id'] + '.jpg'
+            score = flask.request.args['id'].split('_')[-1].rstrip('.jpg')
             return flask.render_template(
                 'share_score.html', result={
                     'score': score,

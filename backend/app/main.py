@@ -110,6 +110,10 @@ def share_image():
     # If no correct file is posted, go back to the main page.
     return flask.redirect("/", code=302)
 
+@app.route('/face/<path:path>')
+def send_face(path):
+    print ("PATH requested", path)
+    return flask.send_from_directory(app.config['UPLOAD_FOLDER'], path)
 
 @app.route('/score', methods=['GET', 'POST'])
 def score():
